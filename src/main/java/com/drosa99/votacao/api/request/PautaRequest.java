@@ -13,6 +13,6 @@ import javax.validation.constraints.NotNull;
 public class PautaRequest {
 
     @ApiModelProperty(value = "Descricao da pauta.")
-    @NotNull
+    @NotNull(message = "descricao.empty")
     private String descricao;
 }

@@ -23,7 +23,7 @@ public class PautaEntity implements Serializable {
     private Long id;
 
     @OneToMany(mappedBy = "pauta")
-    private List<VotoEntity> votoEntity;
+    private List<VotoEntity> votos;
 
     @Column
     private String descricao;

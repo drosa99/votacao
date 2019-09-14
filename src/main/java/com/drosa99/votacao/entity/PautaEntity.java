@@ -19,6 +19,7 @@ public class PautaEntity implements Serializable {
     @Id
     @SequenceGenerator(allocationSize = 1, name = "pauta_seq", sequenceName = "pauta_seq")
     @GeneratedValue(generator = "pauta_seq", strategy = GenerationType.SEQUENCE)
+    @Column(name = "OID_PAUTA")
     private Long id;
 
     @OneToMany(mappedBy = "pauta")
@@ -26,4 +27,7 @@ public class PautaEntity implements Serializable {
 
     @Column
     private String descricao;
+
+    @Column
+    private Boolean isAberta;
 }

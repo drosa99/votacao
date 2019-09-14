@@ -18,5 +18,6 @@ public class AssociadoEntity implements Serializable {
     @Id
     @SequenceGenerator(allocationSize = 1, name = "associado_seq", sequenceName = "associado_seq")
     @GeneratedValue(generator = "associado_seq", strategy = GenerationType.SEQUENCE)
+    @Column(name = "OID_ASSOCIADO")
     private Long id;
 }

@@ -27,8 +27,8 @@ public class PautaService {
     }
 
     public PautaResponse contabilizarResultado(Long id) {
-        PautaEntity pautaEntity = pautaRepository.findById(id).orElseThrow(() -> {
-            throw new ExpectedException("notFound.pauta");
+        PautaEntity pautaEntity = pautaRepository.findById(id).<ExpectedException>orElseThrow(() -> {
+            throw new ExpectedException();
         });
         List<VotoEntity> votoEntityList = pautaEntity.getVotos();
         long votosSim = votoEntityList.stream().filter(it -> it.getValor().equals(true)).count();
@@ -44,8 +44,8 @@ public class PautaService {
     }
 
     public Boolean isPautaAberta(Long id) {
-        PautaEntity pautaEntity = pautaRepository.findById(id).orElseThrow(() -> {
-            throw new ExpectedException("notFound.pauta");
+        PautaEntity pautaEntity = pautaRepository.findById(id).<ExpectedException>orElseThrow(() -> {
+            throw new ExpectedException();
         });
         return pautaEntity.getIsAberta();
     }

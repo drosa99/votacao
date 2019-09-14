@@ -15,9 +15,9 @@ public class VotoRequest {
     @ApiModelProperty(value = "Identificador da pauta.")
     @NotNull(message = "pauta.empty")
     private Long idPauta;
-    @ApiModelProperty(value = "Identificador do associado.")
+    @ApiModelProperty(value = "CPF do associado.")
     @NotNull(message = "associado.empty")
-    private Long idAssociado;
+    private String idAssociado;
     @ApiModelProperty(value = "O voto: SIM - true; NAO - false.")
     @NotNull(message = "valor.empty")
     private Boolean valor;

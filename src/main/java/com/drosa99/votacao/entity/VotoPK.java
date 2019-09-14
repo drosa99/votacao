@@ -16,7 +16,7 @@ public class VotoPK implements Serializable {
     private static final long serialVersionUID = -8376435254451245722L;
 
     @Column(name = "OID_ASSOCIADO")
-    private Long idAssociado;
+    private String idAssociado;
 
     @Column(name = "OID_PAUTA")
     private Long idPauta;

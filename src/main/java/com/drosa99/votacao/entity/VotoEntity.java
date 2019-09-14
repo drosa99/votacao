@@ -29,8 +29,4 @@ public class VotoEntity implements Serializable {
     @JoinColumn(name = "OID_PAUTA", referencedColumnName = "OID_PAUTA", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private PautaEntity pauta;
-
-    @JoinColumn(name = "OID_ASSOCIADO", referencedColumnName = "OID_ASSOCIADO", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private AssociadoEntity associado;
 }

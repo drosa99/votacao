@@ -8,6 +8,7 @@ import com.drosa99.votacao.exception.ExpectedException;
 import com.drosa99.votacao.repository.PautaRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -18,35 +19,55 @@ public class PautaService {
         this.pautaRepository = pautaRepository;
     }
 
-    public void cadastrarPauta(PautaRequest pautaRequest) {
+    public PautaEntity cadastrarPauta(PautaRequest pautaRequest) {
         PautaEntity pautaEntity = PautaEntity.builder()
                 .descricao(pautaRequest.getDescricao())
-                .isAberta(false)
+                .comecou(false)
                 .build();
-        pautaRepository.save(pautaEntity);
+        return pautaRepository.save(pautaEntity);
     }
 
     public PautaResponse contabilizarResultado(Long id) {
-        PautaEntity pautaEntity = pautaRepository.findById(id).<ExpectedException>orElseThrow(() -> {
-            throw new ExpectedException();
-        });
+        PautaEntity pautaEntity = getPautaEntity(id);
         List<VotoEntity> votoEntityList = pautaEntity.getVotos();
         long votosSim = votoEntityList.stream().filter(it -> it.getValor().equals(true)).count();
         long votosNao = votoEntityList.stream().filter(it -> it.getValor().equals(false)).count();
-        PautaResponse pautaResponse = PautaResponse.builder()
+        return PautaResponse.builder()
                 .descricao(pautaEntity.getDescricao())
                 .id(id)
                 .votosSim((int) votosSim)
                 .votosNao((int) votosNao)
-                .resultado(votosSim > votosNao ? "Sim" : "Nao")
+                .resultado(votosSim > votosNao ? "Sim" : votosSim == votosNao ? "Empate" : "Nao")
                 .build();
-        return null;
     }
 
-    public Boolean isPautaAberta(Long id) {
-        PautaEntity pautaEntity = pautaRepository.findById(id).<ExpectedException>orElseThrow(() -> {
-            throw new ExpectedException();
+
+    public void iniciarVotacao(Long id, Long tempoAberta) {
+        PautaEntity pautaEntity = getPautaEntity(id);
+        pautaEntity.setComecou(true);
+        Long minutos = 1L;
+        if (tempoAberta != null) {
+            minutos = tempoAberta;
+        }
+        LocalDateTime tempoFechamento = LocalDateTime.now().plusMinutes(minutos);
+        pautaEntity.setFechamento(tempoFechamento);
+        pautaRepository.save(pautaEntity);
+    }
+
+    public void verificaVotacaoAberta(Long id) {
+        PautaEntity pautaEntity = getPautaEntity(id);
+        if (!pautaEntity.getComecou()) {
+            throw new ExpectedException("error.votacaoAindaNaoIniciada");
+        }
+        if (LocalDateTime.now().isAfter(pautaEntity.getFechamento())) {
+            throw new ExpectedException("error.votacaoFechada");
+        }
+    }
+
+
+    private PautaEntity getPautaEntity(Long id) {
+        return pautaRepository.findById(id).<ExpectedException>orElseThrow(() -> {
+            throw new ExpectedException("notFound.pauta");
         });
-        return pautaEntity.getIsAberta();
     }
 }

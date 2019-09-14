@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -29,5 +30,8 @@ public class PautaEntity implements Serializable {
     private String descricao;
 
     @Column
-    private Boolean isAberta;
+    private Boolean comecou;
+
+    @Column
+    private LocalDateTime fechamento;
 }

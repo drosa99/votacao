@@ -21,11 +21,6 @@ public class VotoEntity implements Serializable {
     @Column
     private Boolean valor;
 
-//    @Id
-//    @SequenceGenerator(allocationSize = 1, name = "voto_seq", sequenceName = "voto_seq")
-//    @GeneratedValue(generator = "voto_seq", strategy = GenerationType.SEQUENCE)
-//    private Long id;
-
     @JoinColumn(name = "OID_PAUTA", referencedColumnName = "OID_PAUTA", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private PautaEntity pauta;

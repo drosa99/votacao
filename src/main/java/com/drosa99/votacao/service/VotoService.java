@@ -21,6 +21,7 @@ public class VotoService {
         this.pautaService = pautaService;
     }
 
+    //Metodo de cadastrar voto, caso ja exista um voto do associado para esta pauta, e lancada excecao
     public void cadastrarVoto(VotoRequest votoRequest) {
         verificaCpf(votoRequest.getIdAssociado());
         pautaService.verificaVotacaoAberta(votoRequest.getIdPauta());
@@ -32,6 +33,7 @@ public class VotoService {
         votoRepository.save(votoEntity);
     }
 
+    //Metodo auxiliar que recebe a request de voto e cria a chave primaria com cpf do associado e id da pauta
     private VotoPK transformaRequestEmVotoPk(VotoRequest votoRequest) {
         return VotoPK.builder()
                 .idAssociado(votoRequest.getIdAssociado())
@@ -39,6 +41,8 @@ public class VotoService {
                 .build();
     }
 
+    //Tarefa bonus 1, este metodo faz a chamada para a api externa e lanca as devidas excecoes caso o cpf seja invalido
+    // ou nao esteja apto a votar, caso o cpf esteja apto, nao acontece nada
     private void verificaCpf(String cpf) {
         RestTemplate restTemplate = new RestTemplate();
         URI url = URI.create("https://user-info.herokuapp.com/users/".concat(cpf));

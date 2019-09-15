@@ -19,6 +19,7 @@ public class PautaService {
         this.pautaRepository = pautaRepository;
     }
 
+    //Cadastro de pauta
     public PautaEntity cadastrarPauta(PautaRequest pautaRequest) {
         PautaEntity pautaEntity = PautaEntity.builder()
                 .descricao(pautaRequest.getDescricao())
@@ -27,6 +28,7 @@ public class PautaService {
         return pautaRepository.save(pautaEntity);
     }
 
+    //Metodo que contabiliza o resultado dos votos da pauta
     public PautaResponse contabilizarResultado(Long id) {
         PautaEntity pautaEntity = getPautaEntity(id);
         List<VotoEntity> votoEntityList = pautaEntity.getVotos();
@@ -41,7 +43,7 @@ public class PautaService {
                 .build();
     }
 
-
+    //Metodo responsavel por iniciar a votacao e definir a data/hora em que sera fechada
     public void iniciarVotacao(Long id, Long tempoAberta) {
         PautaEntity pautaEntity = getPautaEntity(id);
         pautaEntity.setComecou(true);
@@ -54,6 +56,8 @@ public class PautaService {
         pautaRepository.save(pautaEntity);
     }
 
+    //Metodo auxiliar que verifica se uma pauta esta aberta para votacao, se ela nao estiver,
+    // sao lancadas excecoes de ainda nao aberta ou ja encerrada
     public void verificaVotacaoAberta(Long id) {
         PautaEntity pautaEntity = getPautaEntity(id);
         if (!pautaEntity.getComecou()) {
@@ -64,7 +68,7 @@ public class PautaService {
         }
     }
 
-
+    //Metodo auxiliar que busca uma Pauta no banco pelo id e a retorna, se ela nao existir, lanca uma excecao de pauta nao encontrada
     private PautaEntity getPautaEntity(Long id) {
         return pautaRepository.findById(id).<ExpectedException>orElseThrow(() -> {
             throw new ExpectedException("notFound.pauta");
